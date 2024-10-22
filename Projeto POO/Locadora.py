@@ -5,7 +5,7 @@ class Cliente:
         self.idade = idade 
 
     def get_contato(self):
-        print(f'Telefone para contato: {self.__contato}')
+        return self.__contato
 
     def set_contato(self, contato):
         if contato != self.__contato:
@@ -15,46 +15,68 @@ class Cliente:
     def detalhes (self):
         print(f'Nome Cliente: {self.nome}')
         print(f'Idade Cliente: {self.idade}')
+        print(f'Contato Cliente: {self.get_contato()}')
 
         
             
-class Aluguel(Cliente):
-    def __init__(self, nome, idade, contato, preco, tempo):
-        super().__init__(nome, idade, contato)
-        self.preco = preco
-        self.tempo = tempo
+class Aluguel:
+    def __init__(self, cliente, filme):
+        self.preco = 0
+        self.periodo = 0
+        self.cliente = cliente
+        self.filme = filme
+    
+    def devolucao (self, preco, periodo):
+        periodo = int(input('Favor, digite quantos dias você ficou com o filme: '))
+        if periodo >= 1:
+            valor_por_dia = 2
+            preco = periodo * valor_por_dia
+            self.periodo = periodo
+            self.preco = preco
 
-    def periodo_aluguel (self, tempo):
-        tempo = int(input(f'Escolha um período de tempo para alugar seu filme: \n1. 7 dias \n2. 15 dias \n3. 1 mês'))
-        if tempo == 1:
-            print('Seu filme foi alugado por 7 dias!')
-            self.tempo = tempo
-        if tempo == 2:
-            print('Seu filme foi alugado por 15 dias!')
-            self.tempo = tempo
-        if tempo == 3:
-            print('Seu filme foi alugado por 1 mês!')
-            self.tempo = tempo    
-   
-        
-#Fiquei com algumas dúvidas em relação a como adicionar o filme, acho melhr discutirmmos sobre :p
+    def dados_cliente(self):
+        self.cliente.detalhes()
 
-
-
+    def verificacao(self, filme):
+        if self.cliente.idade < self.filme.classificacao:
+            print('Você não possui a idade dentro da classificação do filme. Favor, escolher outro')
 
 
 
+class Filme: 
+    def __init__(self, nome, genero, ano_de_estreia,  sinopse, classificicacao ,diretor, produtora,):
+        self.nome = nome
+        self.genero = genero
+        self.ano_de_estreia = ano_de_estreia
+        self.diretor = diretor
+        self.produtora = produtora
+        self.sinopse = sinopse
+        self.classificacao = classificicacao
 
-
-
-
-
-'''
 
 class Produtora:
+    def __init__(self, nome, diretores, filmes):
+        self.nome = nome 
+        self.diretores = diretores
+        self.filmes = filmes 
+
+    def detalhes(self):
+        print(f'Nome Produtora: {self.nome} \n Nome diretores: {self.diretores} \n Filmes produzidos: {self.filmes}')
+
 
 class Diretor:
-'''
+    def __init__ (self, nome, produtoras, filmes):
+        self.nome = nome
+        self.produtoras = produtoras
+        self.filmes = filmes
+    
+    def detalhes(self):
+        print(f'Nome diretor: {self.nome} \n Produtas que trabalha: {self.produtoras} \n Filmes dirigidos: {self.filmes}')
+
+
 cliente1 = Cliente('Joana', "11 972904999", 18)
 cliente1.get_contato()
 cliente1.set_contato('233478')
+
+#deixei lindo, pode destruir :p
+
