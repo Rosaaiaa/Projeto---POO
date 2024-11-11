@@ -442,48 +442,57 @@ class Aluguel(Base):
         menu_saida()
 
     def alterar_aluguel(session, id_aluguel):
+        limpar_tela()
         aluguel = session.query(Aluguel).filter_by(id=id_aluguel).one_or_none()
         if not aluguel:
             raise ElementoNaoEncontradoError(f"\nErro: O aluguel com o ID '{id_aluguel}' não foi encontrado.")
         
-        print("id: ", aluguel.id)
-        print("data_aluguel: ", aluguel.data_aluguel)
-        print("data_aluguel_devolucao: ", aluguel.data_aluguel_devolucao)
-        print("tempo_aluguel: ", aluguel.tempo_aluguel)
-        print("valor: ", aluguel.valor)
-        print("status: ", aluguel.status)
+        print("Id: ", aluguel.id)
+        print("Data aluguel: ", aluguel.data_aluguel)
+        print("Data devolução: ", aluguel.data_devolucao)
+        print("Tempo aluguel: ", aluguel.tempo_aluguel)
+        print("Valor: ", aluguel.valor)
+        print("Status: ", aluguel.status)
 
         print("\nEscolha o campo que deseja editar:")
-        print("1 - data_aluguel")
-        print("2 - data_aluguel_devolucao")
-        print("3 - tempo_aluguel")
-        print("4 - valor")
-        print("5 - status")
+        print("1 - Tempo aluguel")
+        print("2 - Valor")
+        print("3 - Status")
         print("0 - Sair")
         opcao = int(input("Escolha uma opção: "))
+        limpar_tela()
 
         if opcao == 1:
-            data_aluguel = input("Digite a nova data_aluguel: ")
-            aluguel.data_aluguel = data_aluguel
-        elif opcao == 2:
-            data_aluguel_devolucao = input("Digite a nova data_aluguel_devolucao: ")
-            aluguel.data_aluguel_devolucao = data_aluguel_devolucao
-        elif opcao == 3:
-            tempo_aluguel = int(input("Digite o novo tempo_aluguel: "))
+            tempo_aluguel = int(input("Digite o novo Tempo aluguel: "))
             aluguel.tempo_aluguel = tempo_aluguel
-        elif opcao == 4:
+        elif opcao == 2:
             valor = float(input("Digite o novo valor: "))            
             aluguel.valor = valor
-        elif opcao == 5:
-            status = input("Digite o novo status: ")
-            aluguel.status = status
+        elif opcao == 3:
+            if aluguel.status == True:
+                aluguel.status = False
+            else:
+                aluguel.status = True
         elif opcao == 0:
             main()
         else:
+            Aluguel.alterar_aluguel(session, id_aluguel)
             print("Opção inválida. Tente novamente.")
-
+        
         session.commit()
+        limpar_tela()
         print("\nAluguel editado com sucesso!")
+        print("\nRealizar alterações Outras Alterações?")
+        print("1 - Sim")
+        print("2 - Não")
+        opcao = int(input("Escolha uma opção: "))
+
+        if opcao == 1:
+            Aluguel.alterar_aluguel(session, id_aluguel)
+        elif opcao == 2:
+            menu_saida()
+
+       
 
         menu_saida()
 
@@ -493,20 +502,22 @@ class Aluguel(Base):
             raise ElementoNaoEncontradoError(f"\nErro: O aluguel com o ID '{id_aluguel}' não foi encontrado.")
 
         print(f"\nAluguel ID: {aluguel.id}")
-        print(f'valor_diaria: {aluguel.valor_diaria}')
-        print(f'data_aluguel: {aluguel.data_aluguel}')
-        print(f'data_aluguel_devolucao: {aluguel.data_aluguel_devolucao}')
-        print(f'tempo_aluguel: {aluguel.tempo_aluguel}')
-        print(f'valor: {aluguel.valor}')
-        print(f'status: {aluguel.status}')
-        print(f'cliente_cpf: {aluguel.cliente_cpf}')
-        print(f'filme_id: {aluguel.filme_id}')
+        print(f'valor diaria: {aluguel.valor_diaria}')
+        print(f'Data aluguel: {aluguel.data_aluguel}')
+        print(f'Data devolucao: {aluguel.data_devolucao}')
+        print(f'Tempo aluguel: {aluguel.tempo_aluguel}')
+        print(f'Valor: {aluguel.valor}')
+        print(f'Status: {aluguel.status}')
+        print(f'Cliente Cpf: {aluguel.cliente_cpf}')
+        print(f'Filme Id: {aluguel.filme_id}')
 
         print("\nDeseja realmente excluir o aluguel?")
         print("1 - Sim")
         print("0 - Voltar ao menu principal")
         opcao = obter_input("Escolha uma opção: ")
         if opcao == '1':
+            if aluguel.status == True:
+                aluguel.status = False
             session.delete(aluguel)
             session.commit()
             print("\nAluguel excluido com sucesso!")
