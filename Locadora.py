@@ -17,7 +17,7 @@ def main():
         print("0 - Sair")
         print("========================================")
 
-        opcao = int(obter_input("Escolha uma opção: "))
+        opcao = obter_input("Escolha uma opção: ", int)
 
         if opcao == 1: #CADASTRAR
             limpar_tela()
