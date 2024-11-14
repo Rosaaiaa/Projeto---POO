@@ -439,7 +439,7 @@ class Aluguel(Base):
         if filmes_alugados:
             print("\nAlugueis feitos:")
             for aluguel in filmes_alugados:
-                print(f"ID: {aluguel.id}, Cliente: {aluguel.cliente.nome}, Data: {aluguel.data_aluguel}, Preço: {aluguel.valor} R$")
+                print(f"ID: {aluguel.id}, Cliente: {aluguel.cliente.nome}, Filme: {aluguel.filme.nome_filme}, Data: {aluguel.data_aluguel}")
         else:
             raise ElementoNaoEncontradoError("\nNenhum aluguel feito.")
 
