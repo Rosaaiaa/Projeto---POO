@@ -1,7 +1,6 @@
 def main():
-    from Classes import Cliente, Filme, Aluguel, Diretor, Produtora
+    from Classes import Cliente, Filme, Aluguel, Diretor, Produtora, session, limpar_tela
     from Error import ElementoExistenteError, ElementoNaoEncontradoError, AluguelRealizadoError, MenorDeIdadeError, obter_input
-    from Config import session, limpar_tela
     import sys
 
     while True:

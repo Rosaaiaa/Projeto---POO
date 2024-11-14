@@ -1,9 +1,13 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boolean, create_engine
+from sqlalchemy.orm import relationship, declarative_base, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 from Error import *
-from Config import *
 from datetime import datetime
 from Locadora import main
+import os
+import sys
+
+Base = declarative_base()
 
 class Cliente(Base):
     __tablename__ = 'clientes'
@@ -68,7 +72,7 @@ class Cliente(Base):
         print(f"Contato: {cliente.contato}")
         print(f"Endereço: {cliente.endereco}")
 
-        print("\nescolaha uma opção:")
+        print("\nEscolha uma opção:")
         print("========================================")
         print("1 - Editar nome")
         print("2 - Editar idade")
@@ -422,7 +426,7 @@ class Aluguel(Base):
     def consultar_aluguel_por_cpf(session, cpf_cliente):
         alugueis_cliente = session.query(Aluguel).filter_by(cliente_cpf=cpf_cliente).all()
         if alugueis_cliente:
-            print(f"\nAlugueis feitos pelo cliente com CPF {cpf_cliente}:")
+            print(f"\nAlugueis feitos pelo cliente: {aluguel.clientes.nome} com CPF: {cpf_cliente}")
             for aluguel in alugueis_cliente:
                 print(f"ID: {aluguel.id}, Filme: {aluguel.filme.nome_filme}, Data: {aluguel.data_aluguel}")
         else:
@@ -528,8 +532,10 @@ class Aluguel(Base):
             print("Opção inválida. Tente novamente.")
             Aluguel.excluir_aluguel(session, id_aluguel)
 
-
-
+engine = create_engine('sqlite:///Locadora.db')
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 def menu_saida():
     print("\n1 - Voltar ao menu principal?")
@@ -537,8 +543,17 @@ def menu_saida():
     opcao = int(input("Escolha uma opção: "))
     if opcao == 1:
         limpar_tela()
-        return main()
+        main()
     elif opcao == 2:
         sys.exit()
     else:
         print("Opção inválida. Tente novamente.")
+
+def limpar_tela():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
+
+
+
+
