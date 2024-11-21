@@ -186,10 +186,11 @@ def main():
             try:
                 if opcao_alugar == 1:
                     limpar_tela()
-                    cliente_cpf = obter_input("Digite o CPF do cliente: ")
+                    Filme.listar_filmes_disponiveis_para_alugar(session)
                     filme = obter_input("Digite o id do filme: ")
+                    cliente_cpf = obter_input("Digite o CPF do cliente: ")
                     valor_diaria = obter_input("Digite o valor da diaria do aluguel: ", float)
-                    Aluguel.fazer_aluguel(session, cliente_cpf, filme, valor_diaria)
+                    Aluguel.fazer_aluguel(session,filme, cliente_cpf, valor_diaria)
                 
                 elif opcao_alugar == 2:
                     limpar_tela()
