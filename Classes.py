@@ -312,6 +312,15 @@ class Filme(Base):
 
         menu_saida()
 
+    def listar_filmes_disponiveis_para_alugar(session):
+        filmes_disponiveis = session.query(Filme).filter_by(disponivel=True).all()
+        if filmes_disponiveis:
+            print("\nFilmes disponíveis:")
+            for filme in filmes_disponiveis:
+                print(f"ID: {filme.id}, Nome: {filme.nome_filme}, Classificação: {filme.classificacao}")
+        else:
+            raise ElementoNaoEncontradoError("Nenhum filme disponível.")
+
     def listar_filmes(session):
         filmes = session.query(Filme).all()
         if filmes:
@@ -369,7 +378,7 @@ class Aluguel(Base):
     filme = relationship("Filme", back_populates="alugueis")
 
 
-    def fazer_aluguel(session, cliente_cpf, filme_id, valor_diaria):
+    def fazer_aluguel(session, filme_id, cliente_cpf, valor_diaria):
         cliente = session.query(Cliente).filter_by(cpf=cliente_cpf).first()
         filme = session.query(Filme).filter_by(id=filme_id).first()
         aluguel_existente = session.query(Aluguel).filter_by(cliente_cpf=cliente_cpf, filme_id=filme_id).first()
@@ -413,11 +422,12 @@ class Aluguel(Base):
         aluguel = session.query(Aluguel).filter_by(id=id_aluguel).first()
         if aluguel:
             print(f"\nAluguel ID: {aluguel.id}")
-            print(f'data_aluguel: {aluguel.data_aluguel}')
-            print(f'data_aluguel_devolucao: {aluguel.data_devolucao}')
-            print(f'tempo_aluguel: {aluguel.tempo_aluguel}')
-            print(f'valor: {aluguel.valor}')
-            print(f'status: {aluguel.status}')
+            print(f"Cliente: {aluguel.cliente.nome}")
+            print(f'Data aluguel: {aluguel.data_aluguel}')
+            print(f'Data aluguel devolucao: {aluguel.data_devolucao}')
+            print(f'Tempo aluguel: {aluguel.tempo_aluguel}')
+            print(f'Valor: {aluguel.valor}')
+            print(f'Status: {aluguel.status}')
         else:
             raise ElementoNaoEncontradoError("\nAluguel não encontrado.")
 
@@ -426,7 +436,7 @@ class Aluguel(Base):
     def consultar_aluguel_por_cpf(session, cpf_cliente):
         alugueis_cliente = session.query(Aluguel).filter_by(cliente_cpf=cpf_cliente).all()
         if alugueis_cliente:
-            print(f"\nAlugueis feitos pelo cliente: {aluguel.clientes.nome} com CPF: {cpf_cliente}")
+            print(f"\n Alugueis feitos pelo cliente: Nome:{alugueis_cliente[0].cliente.nome} com CPF: {cpf_cliente} ")
             for aluguel in alugueis_cliente:
                 print(f"ID: {aluguel.id}, Filme: {aluguel.filme.nome_filme}, Data: {aluguel.data_aluguel}")
         else:
@@ -486,7 +496,13 @@ class Aluguel(Base):
         session.commit()
         limpar_tela()
         print("\nAluguel editado com sucesso!")
-        print("\nRealizar alterações Outras Alterações?")
+        print("Id: ", aluguel.id)
+        print("Data aluguel: ", aluguel.data_aluguel)
+        print("Data devolução: ", aluguel.data_devolucao)
+        print("Tempo aluguel: ", aluguel.tempo_aluguel)
+        print("Valor: ", aluguel.valor)
+        print("Status: ", aluguel.status)
+        print("\nRealizar Outras Alterações?")
         print("1 - Sim")
         print("2 - Não")
         opcao = int(input("Escolha uma opção: "))
@@ -494,9 +510,8 @@ class Aluguel(Base):
         if opcao == 1:
             Aluguel.alterar_aluguel(session, id_aluguel)
         elif opcao == 2:
-            menu_saida()
-
-       
+            limpar_tela()
+            main()
 
         menu_saida()
 
